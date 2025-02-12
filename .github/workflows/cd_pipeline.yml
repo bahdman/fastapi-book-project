@@ -38,10 +38,10 @@ jobs:
           chmod 600 /tmp/mykey.pem
           ssh -o StrictHostKeyChecking=no -i /tmp/mykey.pem ${{ secrets.EC2_INSTANCE }} << 'EOF'
             # Pull the latest image
-            docker pull bahdman/hngfastapi:latest
+            sudo docker pull bahdman/hngfastapi:latest
             # Stop and remove the old container if it's running
-            docker stop zealous_mahavira || true
-            docker rm zealous_mahavira || true
+            sudo docker stop zealous_mahavira || true
+            sudo docker rm zealous_mahavira || true
             # Run the new container with the latest image
-            docker run -d -p 8080:80 bahdman/hngfastapi:latest
+            sudo docker run -d -p 8080:80 bahdman/hngfastapi:latest
           EOF
