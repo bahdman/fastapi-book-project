@@ -1,0 +1,47 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker Image
+        run: |
+          docker build -t bahdman/hngfastapi:latest .
+
+      - name: Push Docker Image to Docker Hub
+        run: |
+          docker push bahdman/hngfastapi:latest
+
+      - name: Deploy to EC2 Instance
+        env:
+          PEM_FILE: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$PEM_FILE" > /tmp/mykey.pem
+          chmod 600 /tmp/mykey.pem
+          ssh -o StrictHostKeyChecking=no -i /tmp/mykey.pem ${{ secrets.EC2_INSTANCE }} << 'EOF'
+            # Pull the latest image
+            docker pull bahdman/hngfastapi:latest
+            # Stop and remove the old container if it's running
+            docker stop zealous_mahavira || true
+            docker rm zealous_mahavira || true
+            # Run the new container with the latest image
+            docker run -d -p 8080:80 bahdman/hngfastapi:latest
+          EOF
