@@ -23,7 +23,3 @@ jobs:
     - name: Run tests
       run: |
         pytest
-        
-    - name: Check for test errors
-        if: failure()
-        run: exit 1
