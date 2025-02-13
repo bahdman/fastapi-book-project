@@ -129,6 +129,49 @@ The API includes proper error handling for:
 - Invalid genre types
 - Malformed requests
 
+## Setup and Installation
+
+1. Clone the repository
+ - First, clone the repository to your local machine:
+
+git clone https://github.com/your-username/book-api.git
+
+cd book-api
+
+2. Install dependencies
+
+Create a virtual environment and install the dependencies:
+
+- python3 -m venv venv
+- source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+- pip install -r requirements.txt
+
+3. Run the application locally
+
+To run the application locally with FastAPI and Uvicorn:
+
+- uvicorn main:app --reload
+- This will start the application locally at http://127.0.0.1:8000.
+
+4. Docker (Optional)
+If you want to run the application inside a Docker container:
+
+Build the Docker image:
+
+- docker build -t book-api .
+- Run the Docker container:
+- docker run -d -p 8080:80 book-api
+- Your application will be available at http://localhost:8080.
+
+## Deployment
+
+To deploy the API to a server:
+
+- Set up your server (AWS EC2, DigitalOcean, etc.).
+- SSH into your server and clone the repository.
+- Follow the setup instructions above to install dependencies or use Docker.
+- Configure Nginx as a reverse proxy (if needed) to forward traffic to your FastAPI app running on a Docker container or locally.
+
 ## Contributing
 
 1. Fork the repository
