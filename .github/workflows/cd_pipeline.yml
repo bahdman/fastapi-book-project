@@ -40,7 +40,7 @@ jobs:
             # Pull the latest image
             sudo docker pull bahdman/hngfastapi:latest
             # Stop and remove any running container
-            CONTAINER_ID=$(sudo docker ps -q --filter ancestor=bahdman/hngfastapi:latest)
+            CONTAINER_ID=$(sudo docker ps -q)
             if [ ! -z "$CONTAINER_ID" ]; then
               sudo docker stop $CONTAINER_ID
               sudo docker rm $CONTAINER_ID
