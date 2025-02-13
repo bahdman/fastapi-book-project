@@ -39,9 +39,11 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i /tmp/mykey.pem ${{ secrets.EC2_INSTANCE }} << 'EOF'
             # Pull the latest image
             sudo docker pull bahdman/hngfastapi:latest
-            # Stop and remove the old container if it's running
-            sudo docker stop $(sudo docker ps -q --filter ancestor=bahdman/hngfastapi:latest) || true
-            sudo docker rm $(sudo docker ps -a -q --filter ancestor=bahdman/hngfastapi:latest) || true
-            # Run the new container with the latest image
+            # Stop and remove any running container
+            CONTAINER_ID=$(sudo docker ps -q --filter ancestor=bahdman/hngfastapi:latest)
+            if [ ! -z "$CONTAINER_ID" ]; then
+              sudo docker stop $CONTAINER_ID
+              sudo docker rm $CONTAINER_ID
+            fi
             sudo docker run -d -p 8080:8080 bahdman/hngfastapi:latest
           EOF
