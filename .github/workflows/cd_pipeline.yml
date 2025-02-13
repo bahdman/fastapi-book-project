@@ -40,8 +40,8 @@ jobs:
             # Pull the latest image
             sudo docker pull bahdman/hngfastapi:latest
             # Stop and remove the old container if it's running
-            sudo docker stop zealous_mahavira || true
-            sudo docker rm zealous_mahavira || true
+            sudo docker stop $(sudo docker ps -q --filter ancestor=bahdman/hngfastapi:latest) || true
+            sudo docker rm $(sudo docker ps -a -q --filter ancestor=bahdman/hngfastapi:latest) || true
             # Run the new container with the latest image
-            sudo docker run -d -p 8080:80 bahdman/hngfastapi:latest
+            sudo docker run -d -p 8080:8080 bahdman/hngfastapi:latest
           EOF
